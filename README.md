@@ -16,16 +16,16 @@ There is a system created by Microsoft called Caption Bot (https://www.captionbo
 ## Dataset: COCO 2020 (Common Objects in Context)
 ### COCO is a large-scale object detection, segmentation, and captioning dataset.
 ### COCO has several features:
-#### Object segmentation
-#### Recognition in context
-#### Superpixel stuff segmentation
-#### 330K images (>200K labeled)
-#### 1.5 million object instances
-#### 80 object categories
-#### 91 stuff categories
-#### 5 captions per image
-#### 250,000 people with keypoints
-##### reference : https://cocodataset.org/#home
+1. Object segmentation
+2. Recognition in context
+3. Superpixel stuff segmentation
+4. 330K images (>200K labeled)
+5. 1.5 million object instances
+6. 80 object categories
+7. 91 stuff categories
+8. 5 captions per image
+9. 250,000 people with keypoints
+10. reference : https://cocodataset.org/#home
 ### We are now using the validation set in this dataset to train our model.
 ### We splitted into 20011 of training set and  5003 of validation set.
 
