@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Caption</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+</head>
+<body>
+<br>
+<div class="ui raised very padded text container segment">
+
+<h2>Prediction</h2>
+{% block content %}
+
+<p>
+    <form>
+    <div class="ui input focus">
+        <input name="prediction_url" type="text" placeholder="Search...">
+    </div>
+    <input class="ui button" type="submit" value="Submit" />
+    </form>
+</p>
+
+<img class="ui centered medium rounded image" src="{{image_url}}">
+Prediction: {{' '.join(prediction_caption)}}
+<br>
+
+<!-- <img class="ui centered medium rounded image" src="{{image_url}}"> -->
+<!-- Prediction: {{' '.join(prediction_caption_2)}} -->
+<br>
+
+
+{% endblock %}
+
+<div class="voiceinator">
+
+    <h2>The Voice: speak out loud</h2>
+
+    <select name="voice" id="voices">
+      <option value="">Select A Voice</option>
+    </select>
+
+    <label for="rate">Rate:</label>
+    <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
+
+    <label for="pitch">Pitch:</label>
+
+    <input name="pitch" type="range" min="0" max="2" step="0.1">
+    <!-- <textarea name="text">Hello! I love JavaScript 👍</textarea> -->
+    <!-- <textarea name="text"> {{' '.join(prediction_caption)}}</textarea> -->
+
+    <div class="ui message" name="text">
+        <div class="header">
+          Generated Caption
+        </div>
+        <p>   
+            {{' '.join(prediction_caption)}}
+        </p>
+      </div>
+
+
+    <button class="ui button" id="stop">Stop!</button>
+    <button class="ui button" id="speak">Speak</button>
+
+
+
+<!-- JS -->
+<script>
+const msg = new SpeechSynthesisUtterance();
+let voices = [];
+const voicesDropdown = document.querySelector('[name="voice"]');
+const options = document.querySelectorAll('[type="range"], [name="text"]');
+const speakButton = document.querySelector('#speak');
+const stopButton = document.querySelector('#stop');
+// msg.text = document.querySelector('[name="text"]').value;
+msg.text = document.querySelector('[name="text"] p').textContent;
+
+
+function populateVoices() {
+    voices = this.getVoices();
+    voicesDropdown.innerHTML = voices
+    .filter(voice => voice.lang.includes('en'))
+    .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+    .join('');
+}
+
+function setVoice() {
+    msg.voice = voices.find(voice => voice.name === this.value);
+    toggle();
+}
+
+function toggle(startOver = true) {
+    speechSynthesis.cancel();
+    if (startOver) {
+    speechSynthesis.speak(msg);
+    }
+}
+
+function setOption() {
+    console.log(this.name, this.value);
+    msg[this.name] = this.value;
+    toggle();
+}
+
+speechSynthesis.addEventListener('voiceschanged', populateVoices);
+voicesDropdown.addEventListener('change', setVoice);
+options.forEach(option => option.addEventListener('change', setOption));
+speakButton.addEventListener('click', toggle);
+stopButton.addEventListener('click', () => toggle(false));
+
+</script>
+</div>
+</body>
+</html>
